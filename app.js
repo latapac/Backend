@@ -3,7 +3,7 @@ import cors from "cors"
 import { addUser, getUsers, updateUser } from "./models/user.js"
 import { loginUser } from "./models/user.js"
 import { addMachine, getMachines, addMachineData, getMachineData } from "./models/machine.js"
-import { addCompany, getAllCompany, getCompanies, updateCompany } from "./models/companies.js"
+import { addCompany, getAllCompany, getCompanies, toggleCompanyStatus, updateCompany } from "./models/companies.js"
 import bcrypt from "bcrypt"
 
 const app = express()
@@ -80,11 +80,21 @@ app.get('/getAllUsers/:cid', async (req, res) => {
 
 
 app.post('/addcompany/', async (req, res) => {
-  const { company_id, name, createdAt } = req.body
-  if (await addCompany(company_id, name, createdAt)) {
+  const { company_id, name,status, createdAt } = req.body
+  if (await addCompany(company_id, name,status, createdAt)) {
     res.json({ status: true })
   } else {
     res.json({ status: false })
+  }
+})
+
+
+app.post("/changeCompanyStatus/:cid",async (req,res)=>{
+  const cid = req.params.cid
+  try {
+    return toggleCompanyStatus(cid)
+  } catch (error) {
+    return {status:500,msg:"server failed"}
   }
 })
 
