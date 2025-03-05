@@ -89,10 +89,10 @@ app.post('/addcompany/', async (req, res) => {
 })
 
 
-app.post("/changeCompanyStatus/:cid",async (req,res)=>{
+app.get("/changeCompanyStatus/:cid",async (req,res)=>{
   const cid = req.params.cid
   try {
-    return toggleCompanyStatus(cid)
+    return await toggleCompanyStatus(cid)
   } catch (error) {
     return {status:500,msg:"server failed"}
   }

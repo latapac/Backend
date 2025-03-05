@@ -74,15 +74,18 @@ export async function getCompanies(_cid) {
 export async function toggleCompanyStatus(_cid) {
     try {
         await client.connect();
-
+        
         const db = client.db(dbName);
         const collection = db.collection('companies');
-
+        
         const query = { company_id: _cid }
-
+        
         const company = await collection.findOne(query)
+        console.log("abc2");
 
         if (company) {
+            console.log(company.status);
+            
             const updateCompany = await collection.updateOne(query,{$set:{status:(!company.status)}})
             return {status:200,data:updateCompany}
 
