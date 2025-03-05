@@ -17,7 +17,7 @@ export async function addCompany(_c_id, _name, _status, _createdAt) {
         const db = client.db(dbName);
         const collection = db.collection('companies');
 
-        const query = { company_id: _cid }
+        const query = { company_id: _c_id }
 
         const company = await collection.findOne(query)
 
@@ -81,7 +81,7 @@ export async function toggleCompanyStatus(_cid) {
         const query = { company_id: _cid }
         
         const company = await collection.findOne(query)
-        console.log("abc2");
+
 
         if (company) {
             console.log(company.status);
