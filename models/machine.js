@@ -68,12 +68,7 @@ export async function getMachineData(_sid) {
         const collection = db.collection('machinesMetrics');
         const query = { serial_number: _sid };
 
-        
-
         const machineData = await collection.findOne(query);
-
-      
-        
 
         if (machineData) {
             return { status: 200, data: machineData };
