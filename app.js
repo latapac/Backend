@@ -2,7 +2,7 @@ import express from "express"
 import cors from "cors"
 import { addUser, getUsers, updateUser } from "./models/user.js"
 import { loginUser } from "./models/user.js"
-import { addMachine, getMachines, addMachineData, getMachineData } from "./models/machine.js"
+import { addMachine, getMachines, getMachineData, updateMachineData } from "./models/machine.js"
 import { addCompany, getAllCompany, getCompanies, toggleCompanyStatus, updateCompany } from "./models/companies.js"
 import bcrypt from "bcrypt"
 
@@ -132,18 +132,18 @@ app.get('/getMachine/:cid', async (req, res) => {
   res.json(await getMachines(cid))
 })
 
-app.post('/addMachineData/:mid', async (req, res) => {
-  const mid = req.params.mid
-  if (await addMachineData(mid, req.body)) {
+app.post('/addUpMachineData/:sid', async (req, res) => {
+  const sid = req.params.sid
+  if (await updateMachineData(sid, req.body)) {
     res.json({ status: true })
   } else {
     res.json({ status: false })
   }
 })
 
-app.get('/getMachineData/:mid', async (req, res) => {
-  const mid = req.params.mid
-  res.json(await getMachineData(mid))
+app.get('/getMachineData/:sid', async (req, res) => {
+  const sid = req.params.sid
+  res.json(await getMachineData(sid))
 })
 
 

@@ -48,13 +48,12 @@ export async function getMachines(_cid) {
     }
 }
 
-export async function addMachineData(_mid, _data) {
+export async function updateMachineData(_sid, _data) {
     try {
         await connectToDatabase(); // Reuse the connection
 
         const collection = db.collection('machinesMetrics');
-        const result = await collection.insertOne({ machine_id: _mid, ..._data });
-
+        const result = await collection.updateOne({serial_number:_sid},{$set:{..._data}},{upsert:true})
         return result.acknowledged; // Return true if the insert was successful, else false
     } catch (error) {
         console.error('Error inserting data:', error);
@@ -62,16 +61,21 @@ export async function addMachineData(_mid, _data) {
     }
 }
 
-export async function getMachineData(_mid) {
+export async function getMachineData(_sid) {
     try {
         await connectToDatabase(); // Reuse the connection
 
         const collection = db.collection('machinesMetrics');
-        const query = { machine_id: _mid };
+        const query = { serial_number: _sid };
 
-        const machineData = await collection.find(query).sort({ $natural: -1 }).limit(3).toArray();
+        
 
-        if (machineData.length > 0) {
+        const machineData = await collection.findOne(query);
+
+      
+        
+
+        if (machineData) {
             return { status: 200, data: machineData };
         } else {
             return { status: 404, msg: "NO MACHINE FOUND" };
