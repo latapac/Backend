@@ -48,6 +48,27 @@ export async function getMachines(_cid) {
     }
 }
 
+
+export async function getAllMachines() {
+    try {
+        await connectToDatabase(); // Reuse the connection
+
+        const collection = db.collection('machines');
+
+        const machines = await collection.find().toArray(); // Use .toArray() to get actual data
+
+        if (machines) {
+            return { status: 200, data: machines };
+        } else {
+            return { status: 404, msg: "NO MACHINE FOUND" };
+        }
+    } catch (error) {
+        console.error('Error reading data:', error);
+    }
+}
+
+
+
 export async function updateMachineData(_sid, _data) {
     try {
         await connectToDatabase(); // Reuse the connection
@@ -83,5 +104,5 @@ export async function getMachineData(_sid) {
 // Call this function to close the connection when the app shuts down
 export async function closeConnection() {
     await client.close();
-    console.log('Connection closed');
+    console.log('DATA TRANSACTION DONE');
 }

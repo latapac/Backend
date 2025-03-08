@@ -50,7 +50,7 @@ export async function addUser(_username, _password, _name, _email, _company_id, 
   } finally {
     // Close the connection
     await client.close();
-    console.log('Connection closed');
+    console.log('DATA TRANSACTION DONE');
   }
 }
 
@@ -87,7 +87,7 @@ export async function loginUser(_username, _password) {
   } finally {
     // Close the connection
     await client.close();
-    console.log('Connection closed');
+    console.log('DATA TRANSACTION DONE');
   }
 }
 
@@ -128,7 +128,7 @@ export async function updateUser(_username, _password, _name, _email, _status, _
   } finally {
     // Close the connection
     await client.close();
-    console.log('Connection closed');
+    console.log('DATA TRANSACTION DONE');
   }
 }
 
@@ -155,7 +155,7 @@ export async function getUsers(_cid) {
   } finally {
     // Close the connectiony
     await client.close();
-    console.log('Connection closed');
+    console.log('DATA TRANSACTION DONE');
   }
 }
 

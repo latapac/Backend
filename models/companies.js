@@ -38,7 +38,7 @@ export async function addCompany(_c_id, _name, _status, _createdAt) {
     } finally {
         // Close the connection
         await client.close();
-        console.log('Connection closed');
+        console.log('DATA TRANSACTION DONE');
     }
 }
 
@@ -66,7 +66,7 @@ export async function getCompanies(_cid) {
     } finally {
         // Close the connection
         await client.close();
-        console.log('Connection closed');
+        console.log('DATA TRANSACTION DONE');
     }
 
 }
@@ -98,7 +98,7 @@ export async function toggleCompanyStatus(_cid) {
     } finally {
         // Close the connection
         await client.close();
-        console.log('Connection closed');
+        console.log('DATA TRANSACTION DONE');
     }
 
 }
@@ -135,7 +135,7 @@ export async function updateCompany(_cid, _cname) {
     } finally {
         // Close the connection
         await client.close();
-        console.log('Connection closed');
+        console.log('DATA TRANSACTION DONE');
     }
 
 }
@@ -163,7 +163,7 @@ export async function getAllCompany(_username) {
     } finally {
         // Close the connection
         await client.close();
-        console.log('Connection closed');
+        console.log('DATA TRANSACTION DONE');
     }
 
 }
