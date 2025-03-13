@@ -111,11 +111,6 @@ export async function getMachineData(_sid) {
     }
 }
 
-export async function closeConnection() {
-    await client.close();
-    console.log('DATA TRANSACTION DONE');
-}
-
 
 export async function getAuditTrailData(_sid) {
     try {
@@ -133,5 +128,32 @@ export async function getAuditTrailData(_sid) {
     } catch (error) {
         console.error('Error reading data:', error);
     }
+}
+
+
+export async function getOperator(_sid) {
+    try {
+        await connectToDatabase(); 
+ 
+        const collection = db.collection('AuditTrail'+_sid);
+
+        const query = {topic:"operator_login"}
+
+        const opertor = await collection.find(query).sort({ $natural: -1 }).limit(1).toArray()
+                
+        if (opertor) {
+            return { status: 200, user: opertor[0].d.user_name[0]};
+        } else {
+            return { status: 404, msg: "NO DATA" };
+        }
+    } catch (error) {
+        console.error('Error reading data:', error);
+    }
+}
+
+
+export async function closeConnection() {
+    await client.close();
+    console.log('DATA TRANSACTION DONE');
 }
 
