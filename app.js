@@ -2,7 +2,7 @@ import express from "express"
 import cors from "cors"
 import { addUser, getUsers, updateUser } from "./models/user.js"
 import { loginUser } from "./models/user.js"
-import { addMachine, getMachines, getMachineData, updateMachineData, getAllMachines } from "./models/machine.js"
+import { addMachine, getMachines, getMachineData, updateMachineData, getAllMachines, addAuditTrail, getAuditTrailData } from "./models/machine.js"
 import { addCompany, getAllCompany, getCompanies, toggleCompanyStatus, updateCompany } from "./models/companies.js"
 import bcrypt from "bcrypt"
 
@@ -146,6 +146,20 @@ app.post('/addUpMachineData/:sid', async (req, res) => {
   }
 })
 
+app.post('/addUpMachineAuditTrail/:sid', async (req, res) => {
+  const sid = req.params.sid
+  if (await addAuditTrail(sid, req.body)) {
+    res.json({ status: true })
+  } else {
+    res.json({ status: false })
+  }
+})
+
+app.get('/getAuditTraildata/:sid', async (req, res) => {
+  const sid = req.params.sid
+  res.json(await getAuditTrailData(sid))
+})
+
 app.get('/getMachineData/:sid', async (req, res) => {
   const sid = req.params.sid
   res.json(await getMachineData(sid))
@@ -154,10 +168,10 @@ app.get('/getMachineData/:sid', async (req, res) => {
 
 try {
   app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`server listening on port ${port}`)
   })
 } catch (error) {
   app.listen(3300, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`server listening on port ${port}`)
   })
 }
