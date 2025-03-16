@@ -118,7 +118,7 @@ export async function getAuditTrailData(_sid) {
 
         const collection = db.collection('AuditTrail'+_sid);
        
-        const machineData = await collection.find().sort({_id:-1}).toArray();
+        const machineData = await collection.find({topic:"parameter_change"}).sort({_id:-1}).toArray();
 
         if (machineData) {
             return { status: 200, data: machineData };
