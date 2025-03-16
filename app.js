@@ -168,7 +168,6 @@ app.get('/getOperator/:sid', async (req, res) => {
 
 
 
-
 app.get('/getMachineData/:sid', async (req, res) => {
   const sid = req.params.sid
   res.json(await getMachineData(sid))
