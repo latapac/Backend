@@ -84,7 +84,12 @@ export async function addAuditTrail(sid,data) {
     try {
         await connectToDatabase(); 
         const collection = db.collection('AuditTrail'+sid);
-         
+         if (data.topic=="alarm") {
+            const user = await getOperator(sid)
+            data.user = user
+            const result = await collection.insertOne(data)
+            return result.acknowledged; 
+         }
         const result = await collection.insertOne(data)
         return result.acknowledged; 
     } catch (error) {
