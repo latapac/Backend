@@ -84,6 +84,7 @@ export async function addAuditTrail(sid,data) {
     try {
         await connectToDatabase(); 
         const collection = db.collection('AuditTrail'+sid);
+         
         const result = await collection.insertOne(data)
         return result.acknowledged; 
     } catch (error) {
@@ -118,7 +119,7 @@ export async function getAuditTrailData(_sid) {
 
         const collection = db.collection('AuditTrail'+_sid);
        
-        const machineData = await collection.find({topic:"parameter_change"}).sort({_id:-1}).toArray();
+        const machineData = await collection.find({$or:[{topic:"parameter_change"},{topic:"alarm"}]}).sort({_id:-1}).toArray();
 
         if (machineData) {
             return { status: 200, data: machineData };
@@ -142,7 +143,7 @@ export async function getOperator(_sid) {
         const opertor = await collection.find(query).sort({ $natural: -1 }).limit(1).toArray()
                 
         if (opertor) {
-            return { status: 200, user: opertor[0].d.user_name[0]};
+            return { status: 200, user: opertor[0]?.d.user_name[0]};
         } else {
             return { status: 404, msg: "NO DATA" };
         }
