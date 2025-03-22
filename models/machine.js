@@ -165,7 +165,7 @@ export async function addOEE(sid,data) {
     try {
         await connectToDatabase(); 
         const collection = db.collection('OEE'+sid);
-        data.ts = new Date(data.ts)
+
         const result = await collection.insertOne(data)
         return result.acknowledged; 
     } catch (error) {
