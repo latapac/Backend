@@ -165,6 +165,7 @@ export async function addOEE(sid,data) {
     try {
         await connectToDatabase(); 
         const collection = db.collection('OEE'+sid);
+        data.ts = new Date(data.ts)
         const result = await collection.insertOne(data)
         return result.acknowledged; 
     } catch (error) {
@@ -173,13 +174,31 @@ export async function addOEE(sid,data) {
     }
 }
 
-export async function getOEE(_sid) {
+export async function getOEE(_sid,date,shifttime) {
     try {
         await connectToDatabase(); 
  
         const collection = db.collection('OEE'+_sid);
 
-        const data = await collection.find().toArray()
+        const startOfDay = new Date(date);
+        startOfDay.setUTCHours(0, 0, 0, 0); // Start of the day in UTC
+    
+        const endOfDay = new Date(date);
+        endOfDay.setUTCHours(23, 59, 59, 999);
+        
+        const startOfDayISO = startOfDay.toISOString().replace('Z', '');
+        const endOfDayISO = endOfDay.toISOString().replace('Z', '');
+        console.log(startOfDayISO,endOfDayISO);
+        
+        let query = {
+            'd.shifttime': shifttime, // Match shifttime
+            "ts": {
+              $gte: startOfDayISO, // Greater than or equal to start of the day
+              $lt: endOfDayISO // Less than end of the day
+            }
+        }
+
+        const data = await collection.find(query).toArray()
                 
         if (data) {
             return { status: 200, data};

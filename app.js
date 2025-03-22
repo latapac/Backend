@@ -7,7 +7,7 @@ import { addCompany, getAllCompany, getCompanies, toggleCompanyStatus, updateCom
 import bcrypt from "bcrypt"
 
 const app = express()
-const port = 3000
+const port = 3300
 
 app.use(cors())
 app.use(express.json());
@@ -170,9 +170,10 @@ app.get('/getAuditTraildata/:sid', async (req, res) => {
 })
 
 
-app.get('/getoee/:sid', async (req, res) => {
-  const sid = req.params.sid
-  res.json(await getOEE(sid))
+app.post('/getoee/:sid', async (req, res) => {
+  const sid = req.params.sid  
+  const {date,shifttime} = req.body 
+  res.json(await getOEE(sid,date,shifttime))
 })
 
 
