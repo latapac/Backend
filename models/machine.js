@@ -181,7 +181,7 @@ export async function getOEE(_sid) {
 
         const data = await collection.find().toArray()
                 
-        if (opertor) {
+        if (data) {
             return { status: 200, data};
         } else {
             return { status: 404, msg: "NO DATA" };
