@@ -2,7 +2,7 @@ import express from "express"
 import cors from "cors"
 import { addUser, getUsers, updateUser } from "./models/user.js"
 import { loginUser } from "./models/user.js"
-import { addMachine, getMachines, getMachineData, updateMachineData, getAllMachines, addAuditTrail, getAuditTrailData, getOperator } from "./models/machine.js"
+import { addMachine, getMachines, getMachineData, updateMachineData, getAllMachines, addAuditTrail, getAuditTrailData, getOperator, addOEE, getOEE } from "./models/machine.js"
 import { addCompany, getAllCompany, getCompanies, toggleCompanyStatus, updateCompany } from "./models/companies.js"
 import bcrypt from "bcrypt"
 
@@ -155,9 +155,24 @@ app.post('/addUpMachineAuditTrail/:sid', async (req, res) => {
   }
 })
 
+app.post('/addoee/:sid', async (req, res) => {
+  const sid = req.params.sid
+  if (await addOEE(sid, req.body)) {
+    res.json({ status: true })
+  } else {
+    res.json({ status: false })
+  }
+})
+
 app.get('/getAuditTraildata/:sid', async (req, res) => {
   const sid = req.params.sid
   res.json(await getAuditTrailData(sid))
+})
+
+
+app.get('/getoee/:sid', async (req, res) => {
+  const sid = req.params.sid
+  res.json(await getOEE(sid))
 })
 
 
