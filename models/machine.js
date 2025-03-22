@@ -174,42 +174,50 @@ export async function addOEE(sid,data) {
     }
 }
 
-export async function getOEE(_sid,date,shifttime) {
+export async function getOEE(_sid, date, shifttime) {
     try {
         await connectToDatabase(); 
- 
-        const collection = db.collection('OEE'+_sid);
+        const collection = db.collection('OEE' + _sid);
 
-        const startOfDay = new Date(date);
-        startOfDay.setUTCHours(0, 0, 0, 0); // Start of the day in UTC
-    
-        const endOfDay = new Date(date);
+        // Ensure date is parsed as UTC and matches the expected format
+        const baseDate = new Date(date + "T00:00:00.000Z"); // Force UTC if date is YYYY-MM-DD
+        const startOfDay = new Date(baseDate);
+        startOfDay.setUTCHours(0, 0, 0, 0);
+
+        const endOfDay = new Date(baseDate);
         endOfDay.setUTCHours(23, 59, 59, 999);
-        
+
+        // Match the exact format of ts (no Z, millisecond precision)
         const startOfDayISO = startOfDay.toISOString().replace('Z', '');
         const endOfDayISO = endOfDay.toISOString().replace('Z', '');
-        console.log(startOfDayISO,endOfDayISO);
-        
-        let query = {
-            'd.shifttime': shifttime, // Match shifttime
-            "ts": {
-              $gte: startOfDayISO, // Greater than or equal to start of the day
-              $lt: endOfDayISO // Less than end of the day
-            }
-        }
 
-        const data = await collection.find(query).toArray()
-                
-        if (data) {
-            return { status: 200, data};
+        console.log("Input date:", date);
+        console.log("startOfDayISO:", startOfDayISO);
+        console.log("endOfDayISO:", endOfDayISO);
+
+        let query = {
+            'd.shifttime': shifttime,
+            "ts": {
+                $gte: startOfDayISO,
+                $lt: endOfDayISO
+            }
+        };
+
+        console.log("Query:", query);
+
+        const data = await collection.find(query).toArray();
+        console.log("Found data:", data);
+
+        if (data.length > 0) {
+            return { status: 200, data };
         } else {
             return { status: 404, msg: "NO DATA" };
         }
     } catch (error) {
         console.error('Error reading data:', error);
+        return { status: 500, msg: "Internal server error" };
     }
 }
-
 export async function closeConnection() {
     await client.close();
     console.log('DATA TRANSACTION DONE');
