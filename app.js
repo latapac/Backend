@@ -172,7 +172,7 @@ app.get('/getAuditTraildata/:sid', async (req, res) => {
 
 app.post('/getoee/:sid', async (req, res) => {
   const sid = req.params.sid  
-  const {date,shifttime} = req.body 
+  const {date,RunningShift} = req.body 
   res.json(await getOEE(sid,date,shifttime))
 })
 

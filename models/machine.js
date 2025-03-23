@@ -174,7 +174,7 @@ export async function addOEE(sid,data) {
     }
 }
 
-export async function getOEE(_sid, date, shifttime) {
+export async function getOEE(_sid, date, RunningShift) {
     try {
         await connectToDatabase(); 
         const collection = db.collection('OEE' + _sid);
@@ -196,7 +196,7 @@ export async function getOEE(_sid, date, shifttime) {
         console.log("endOfDayISO:", endOfDayISO);
 
         let query = {
-            'd.shifttime': shifttime,
+            'd.RunningShift': RunningShift,
             "ts": {
                 $gte: startOfDayISO,
                 $lt: endOfDayISO
