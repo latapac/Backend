@@ -7,7 +7,7 @@ import { addCompany, getAllCompany, getCompanies, toggleCompanyStatus, updateCom
 import bcrypt from "bcrypt"
 
 const app = express()
-const port = 3300
+const port = 3000
 
 app.use(cors())
 app.use(express.json());
