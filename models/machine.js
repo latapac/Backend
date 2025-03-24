@@ -119,28 +119,13 @@ export async function getSpeedHistory(_sid) {
     }
 }
 
+
 export async function getOEEHistory(_sid) {
     try {
         await connectToDatabase();
         const collection = db.collection('speed' + _sid);
 
         const speedData = await collection.find({type:"oee"}).toArray();
-
-        return speedData.length > 0 
-            ? { status: 200, data: speedData } 
-            : { status: 404, msg: "NO DATA" };
-    } catch (error) {
-        console.error('Error reading data:', error);
-        return { status: 500, msg: "Server error" };
-    }
-}
-
-export async function getOEEHistory(_sid) {
-    try {
-        await connectToDatabase();
-        const collection = db.collection('speed' + _sid);
-
-        const speedData = await collection.find().toArray();
 
         return speedData.length > 0 
             ? { status: 200, data: speedData } 
