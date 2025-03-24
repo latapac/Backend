@@ -86,10 +86,12 @@ export async function addAuditTrail(sid,data) {
         const collection = db.collection('AuditTrail'+sid);
          if (data.topic=="alarm") {
             const user = await getOperator(sid)
-            console.log(user);
-            
+            const query = {
+                'ts':data.ts,
+                'd.message':data.d.message
+            }
             data.user = user
-            const result = await collection.insertOne(data)
+            const result = await collection.updateOne(query,{$set:{...data}},{upsert:true})
             return result.acknowledged; 
          }
         const result = await collection.insertOne(data)
