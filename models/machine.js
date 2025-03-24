@@ -87,7 +87,7 @@ export async function addAuditTrail(sid,data) {
          if (data.topic=="alarm") {
             const user = await getOperator(sid)
             const query = {
-                'ts':data.ts,
+                'd.trigger_time':data.d.trigger_time,
                 'd.message':data.d.message
             }
             data.user = user
