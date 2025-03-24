@@ -70,10 +70,10 @@ export async function getAllMachines() {
 export async function updateMachineData(_sid, _data) {
     try {
         await connectToDatabase(); 
-
         const collection = db.collection('machinesMetrics');
-        const collectionSpeed = db.collection('speed'+_sid);
-        await collectionSpeed.insertOne({speed:_data.d.current_speed[0],ts:_data.ts});
+        const collectionSpeed = db.collection('history'+_sid);
+        await collectionSpeed.insertOne({speed:_data.d.current_speed[0],ts:_data.ts,type:"speed"});
+        await collectionSpeed.insertOne({speed:_data.d.current_OEE[0],ts:_data.ts,type:"oee"});
         const result = await collection.updateOne({serial_number:_sid},{$set:{..._data}},{upsert:true})
         return result.acknowledged; 
     } catch (error) {
@@ -104,6 +104,38 @@ export async function addAuditTrail(sid,data) {
     }
 }
 export async function getSpeedHistory(_sid) {
+    try {
+        await connectToDatabase();
+        const collection = db.collection('speed' + _sid);
+
+        const speedData = await collection.find({type:"speed"}).toArray();
+
+        return speedData.length > 0 
+            ? { status: 200, data: speedData } 
+            : { status: 404, msg: "NO DATA" };
+    } catch (error) {
+        console.error('Error reading data:', error);
+        return { status: 500, msg: "Server error" };
+    }
+}
+
+export async function getOEEHistory(_sid) {
+    try {
+        await connectToDatabase();
+        const collection = db.collection('speed' + _sid);
+
+        const speedData = await collection.find({type:"oee"}).toArray();
+
+        return speedData.length > 0 
+            ? { status: 200, data: speedData } 
+            : { status: 404, msg: "NO DATA" };
+    } catch (error) {
+        console.error('Error reading data:', error);
+        return { status: 500, msg: "Server error" };
+    }
+}
+
+export async function getOEEHistory(_sid) {
     try {
         await connectToDatabase();
         const collection = db.collection('speed' + _sid);
