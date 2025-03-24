@@ -72,6 +72,8 @@ export async function updateMachineData(_sid, _data) {
         await connectToDatabase(); 
 
         const collection = db.collection('machinesMetrics');
+        const collectionSpeed = db.collection('speed'+_sid);
+        await collectionSpeed.insertOne({speed:_data.d.current_speed[0]});
         const result = await collection.updateOne({serial_number:_sid},{$set:{..._data}},{upsert:true})
         return result.acknowledged; 
     } catch (error) {
@@ -99,6 +101,24 @@ export async function addAuditTrail(sid,data) {
     } catch (error) {
         console.error('Error inserting data:', error);
         return false;
+    }
+}
+
+export async function getSpeedHistory(_sid) {
+    try {
+        await connectToDatabase(); 
+
+        const collection = db.collection('speed'+_sid);
+       
+        const speedData = await collection.find().toArray();
+
+        if (speedData) {
+            return { status: 200, data: speedData };
+        } else {
+            return { status: 404, msg: "NO DATA" };
+        }
+    } catch (error) {
+        console.error('Error reading data:', error);
     }
 }
 

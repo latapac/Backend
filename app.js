@@ -2,7 +2,7 @@ import express from "express"
 import cors from "cors"
 import { addUser, getUsers, updateUser } from "./models/user.js"
 import { loginUser } from "./models/user.js"
-import { addMachine, getMachines, getMachineData, updateMachineData, getAllMachines, addAuditTrail, getAuditTrailData, getOperator, addOEE, getOEE } from "./models/machine.js"
+import { addMachine, getMachines, getMachineData, updateMachineData, getAllMachines, addAuditTrail, getAuditTrailData, getOperator, addOEE, getOEE, getSpeedHistory } from "./models/machine.js"
 import { addCompany, getAllCompany, getCompanies, toggleCompanyStatus, updateCompany } from "./models/companies.js"
 import bcrypt from "bcrypt"
 
@@ -180,6 +180,12 @@ app.post('/getoee/:sid', async (req, res) => {
 app.get('/getOperator/:sid', async (req, res) => {
   const sid = req.params.sid
   res.json(await getOperator(sid))
+})
+
+
+app.get('/getSpeedHistory/:sid', async (req, res) => {
+  const sid = req.params.sid
+  res.json(await getSpeedHistory(sid))
 })
 
 app.get('/getMachineData/:sid', async (req, res) => {
