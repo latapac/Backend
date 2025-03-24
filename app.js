@@ -184,7 +184,7 @@ app.get('/getOperator/:sid', async (req, res) => {
 
 
 app.get('/getSpeedHistory/:sid', async (req, res) => {
-  const sid = req.params.sid
+  const sid = req.params.sid  
   res.json(await getSpeedHistory(sid))
 })
 
