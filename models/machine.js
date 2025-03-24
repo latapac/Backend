@@ -106,7 +106,7 @@ export async function addAuditTrail(sid,data) {
 export async function getSpeedHistory(_sid) {
     try {
         await connectToDatabase();
-        const collection = db.collection('speed' + _sid);
+        const collection = db.collection('history' + _sid);
 
         const speedData = await collection.find({type:"speed"}).toArray();
 
@@ -123,7 +123,7 @@ export async function getSpeedHistory(_sid) {
 export async function getOEEHistory(_sid) {
     try {
         await connectToDatabase();
-        const collection = db.collection('speed' + _sid);
+        const collection = db.collection('history' + _sid);
 
         const speedData = await collection.find({type:"oee"}).toArray();
 
