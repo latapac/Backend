@@ -166,7 +166,7 @@ export async function getOEEHistory(_sid,date) {
               }
           }
 
-        const speedData = await collection.find({}).toArray();
+        const speedData = await collection.find(query).toArray();
 
         return speedData.length > 0 
             ? { status: 200, data: speedData } 
