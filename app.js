@@ -184,13 +184,15 @@ app.get('/getOperator/:sid', async (req, res) => {
 
 
 app.get('/getSpeedHistory/:sid', async (req, res) => {
+  const {date} = req.query
   const sid = req.params.sid  
-  res.json(await getSpeedHistory(sid))
+  res.json(await getSpeedHistory(sid,date))
 })
 
 app.get('/getOeeHistory/:sid', async (req, res) => {
+  const {date} = req.query
   const sid = req.params.sid  
-  res.json(await getOEEHistory(sid))
+  res.json(await getOEEHistory(sid,date))
 })
 
 app.get('/getMachineData/:sid', async (req, res) => {

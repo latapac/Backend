@@ -103,12 +103,33 @@ export async function addAuditTrail(sid,data) {
         return false;
     }
 }
-export async function getSpeedHistory(_sid) {
+export async function getSpeedHistory(_sid,date) {
     try {
         await connectToDatabase();
         const collection = db.collection('history' + _sid);
 
-        const speedData = await collection.find({type:"speed"}).toArray();
+        
+        // Ensure date is parsed as UTC and matches the expected format
+        const baseDate = new Date(date + "T00:00:00.000Z"); // Force UTC if date is YYYY-MM-DD
+        const startOfDay = new Date(baseDate);
+        startOfDay.setUTCHours(0, 0, 0, 0);
+
+        const endOfDay = new Date(baseDate);
+        endOfDay.setUTCHours(23, 59, 59, 999);
+
+        // Match the exact format of ts (no Z, millisecond precision)
+        const startOfDayISO = startOfDay.toISOString().replace('Z', '');
+        const endOfDayISO = endOfDay.toISOString().replace('Z', '');
+
+        const query = {
+            type:"speed",
+            "ts": {
+                $gte: startOfDayISO,
+                $lt: endOfDayISO
+            }
+        }
+
+        const speedData = await collection.find(query).toArray();
 
         return speedData.length > 0 
             ? { status: 200, data: speedData } 
@@ -120,12 +141,32 @@ export async function getSpeedHistory(_sid) {
 }
 
 
-export async function getOEEHistory(_sid) {
+export async function getOEEHistory(_sid,date) {
     try {
         await connectToDatabase();
         const collection = db.collection('history' + _sid);
 
-        const speedData = await collection.find({type:"oee"}).toArray();
+          // Ensure date is parsed as UTC and matches the expected format
+          const baseDate = new Date(date + "T00:00:00.000Z"); // Force UTC if date is YYYY-MM-DD
+          const startOfDay = new Date(baseDate);
+          startOfDay.setUTCHours(0, 0, 0, 0);
+  
+          const endOfDay = new Date(baseDate);
+          endOfDay.setUTCHours(23, 59, 59, 999);
+  
+          // Match the exact format of ts (no Z, millisecond precision)
+          const startOfDayISO = startOfDay.toISOString().replace('Z', '');
+          const endOfDayISO = endOfDay.toISOString().replace('Z', '');
+  
+          const query = {
+              type:"oee",
+              "ts": {
+                  $gte: startOfDayISO,
+                  $lt: endOfDayISO
+              }
+          }
+
+        const speedData = await collection.find({}).toArray();
 
         return speedData.length > 0 
             ? { status: 200, data: speedData } 
@@ -227,9 +268,6 @@ export async function getOEE(_sid, date, RunningShift) {
         const startOfDayISO = startOfDay.toISOString().replace('Z', '');
         const endOfDayISO = endOfDay.toISOString().replace('Z', '');
 
-        console.log("Input date:", date);
-        console.log("startOfDayISO:", startOfDayISO);
-        console.log("endOfDayISO:", endOfDayISO);
 
         let query = {
             'd.RunningShift': RunningShift,
