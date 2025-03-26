@@ -2,7 +2,7 @@ import express from "express"
 import cors from "cors"
 import { addUser, getUsers, updateUser } from "./models/user.js"
 import { loginUser } from "./models/user.js"
-import { addMachine, getMachines, getMachineData, updateMachineData, getAllMachines, addAuditTrail, getAuditTrailData, getOperator, addOEE, getOEE, getSpeedHistory, getOEEHistory } from "./models/machine.js"
+import { addMachine, getMachines, getMachineData, updateMachineData, getAllMachines, addAuditTrail, getAuditTrailData, getOperator, addOEE, getOEE, getSpeedHistory, getOEEHistory, getBatch } from "./models/machine.js"
 import { addCompany, getAllCompany, getCompanies, toggleCompanyStatus, updateCompany } from "./models/companies.js"
 import bcrypt from "bcrypt"
 
@@ -164,6 +164,16 @@ app.post('/addoee/:sid', async (req, res) => {
   }
 })
 
+
+app.post('/addbatch/:sid', async (req, res) => {
+  const sid = req.params.sid
+  if (await addOEE(sid, req.body)) {
+    res.json({ status: true })
+  } else {
+    res.json({ status: false })
+  }
+})
+
 app.get('/getAuditTraildata/:sid', async (req, res) => {
   const sid = req.params.sid
   res.json(await getAuditTrailData(sid))
@@ -174,6 +184,13 @@ app.post('/getoee/:sid', async (req, res) => {
   const sid = req.params.sid  
   const {date,RunningShift} = req.body 
   res.json(await getOEE(sid,date,RunningShift))
+})
+
+
+app.post('/getbatch/:sid', async (req, res) => {
+  const sid = req.params.sid  
+  const {date} = req.body 
+  res.json(await getBatch(sid,date))
 })
 
 

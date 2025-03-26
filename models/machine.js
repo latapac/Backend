@@ -46,7 +46,6 @@ export async function getMachines(_cid) {
     }
 }
 
-
 export async function getAllMachines() {
     try {
         await connectToDatabase();
@@ -64,8 +63,6 @@ export async function getAllMachines() {
         console.error('Error reading data:', error);
     }
 }
-
-
 
 export async function updateMachineData(_sid, _data) {
     try {
@@ -197,6 +194,54 @@ export async function getMachineData(_sid) {
 }
 
 
+export async function addBatch(sid,data) {
+    try {
+        await connectToDatabase(); 
+        const collection = db.collection('batch'+sid);
+        const result = await collection.insertOne(data)
+        return result.acknowledged; 
+    } catch (error) {
+        console.error('Error inserting data:', error);
+        return false;
+    }
+}
+
+export async function getBatch(_sid,date) {
+    try {
+        await connectToDatabase();
+        const collection = db.collection('batch' + _sid);
+
+          // Ensure date is parsed as UTC and matches the expected format
+          const baseDate = new Date(date + "T00:00:00.000Z"); // Force UTC if date is YYYY-MM-DD
+          const startOfDay = new Date(baseDate);
+          startOfDay.setUTCHours(0, 0, 0, 0);
+  
+          const endOfDay = new Date(baseDate);
+          endOfDay.setUTCHours(23, 59, 59, 999);
+  
+          // Match the exact format of ts (no Z, millisecond precision)
+          const startOfDayISO = startOfDay.toISOString().replace('Z', '');
+          const endOfDayISO = endOfDay.toISOString().replace('Z', '');
+  
+          const query = {
+              "ts": {
+                  $gte: startOfDayISO,
+                  $lt: endOfDayISO
+              }
+          }
+
+        const speedData = await collection.find(query).toArray();
+
+        return speedData.length > 0 
+            ? { status: 200, data: speedData } 
+            : { status: 404, msg: "NO DATA" };
+    } catch (error) {
+        console.error('Error reading data:', error);
+        return { status: 500, msg: "Server error" };
+    }
+}
+
+
 export async function getAuditTrailData(_sid) {
     try {
         await connectToDatabase(); 
@@ -214,6 +259,7 @@ export async function getAuditTrailData(_sid) {
         console.error('Error reading data:', error);
     }
 }
+
 
 
 export async function getOperator(_sid) {
