@@ -48,6 +48,12 @@ app.post('/login/', async (req, res) => {
   res.json(result)
 })
 
+app.get('/allusers/:cid', async (req, res) => {
+  const cid = req.params.cid
+  let result = await getUsers(cid)
+  res.json(result)
+})
+
 
 
 app.post('/updateUser/', async (req, res) => {
