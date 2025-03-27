@@ -93,7 +93,11 @@ export async function addAuditTrail(sid,data) {
             const result = await collection.updateOne(query,{$set:{...data}},{upsert:true})
             return result.acknowledged; 
          }
-        const result = await collection.insertOne(data)
+         const query = {
+            d:{...data.d},
+            ts:data.ts
+         }
+        const result = await collection.updateOne(query,{$set:{...data}},{upsert:true})
         return result.acknowledged; 
     } catch (error) {
         console.error('Error inserting data:', error);
