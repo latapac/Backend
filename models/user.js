@@ -11,14 +11,9 @@ const dbName = "pacmac"
 
 // Function to insert data
 export async function addUser(_username, _password, _name, _email, _company_id, _status, _role) {
-
-
   if (!_username || !_password || !_name || !_email || !_company_id || !_status || !_role) {
     return { status: 405, message: "missing field" }
   }
-
-
-
   try {
 
     await client.connect();
@@ -92,7 +87,7 @@ export async function loginUser(_username, _password) {
 }
 
 
-export async function updateUser(_username, _password, _name, _email, _status, _role) {
+export async function updateUserPass(_username, _password) {
 
   try {
 
@@ -103,19 +98,16 @@ export async function updateUser(_username, _password, _name, _email, _status, _
 
     const filter = { username: _username }
 
+    const hash = await bcrypt.hash(_password, 10);
+
     const updatedDoc = {
       $set: {
-        password: _password,
-        name: _name,
-        email: _email,
-        status: _status,
-        role: _role
+        password: hash,
       }
     }
 
-    const options = { upsert: true }
 
-    const result = await collection.updateOne(filter, updatedDoc, options)
+    const result = await collection.updateOne(filter, updatedDoc)
     if (result) {
       return true
     } else {

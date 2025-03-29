@@ -1,6 +1,6 @@
 import express from "express"
 import cors from "cors"
-import { addUser, getUsers, updateUser } from "./models/user.js"
+import { addUser, getUsers, updateUserPass } from "./models/user.js"
 import { loginUser } from "./models/user.js"
 import { addMachine, getMachines, getMachineData, updateMachineData, getAllMachines, addAuditTrail, getAuditTrailData, getOperator, addOEE, getOEE, getSpeedHistory, getOEEHistory, getBatch } from "./models/machine.js"
 import { addCompany, getAllCompany, getCompanies, toggleCompanyStatus, updateCompany } from "./models/companies.js"
@@ -56,14 +56,19 @@ app.get('/allusers/:cid', async (req, res) => {
 
 
 
-app.post('/updateUser/', async (req, res) => {
-  const { username, password, name, email, status, role } = req.body
+app.post('/updateUserPassword/', async (req, res) => {
+  const { username, password} = req.body
 
-  if (username == "" || password == "" || name == "" || email == "" || status == "" || role == "") {
+  if (username == "" || password == "" ) {
     return res.json({ status: 405, message: "missing field" })
   }
 
-  if (await updateUser(username, password, name, email, status, role)) {
+  const result = await updateUserPass(username, password)
+
+  console.log(result);
+  
+
+  if (result) {
     res.json({ status: 200, message: "ok" })
   } else {
     res.json({ status: 400, message: "server error" })
@@ -93,6 +98,9 @@ app.post('/addcompany/', async (req, res) => {
     res.json({ status: false })
   }
 })
+
+
+
 
 
 app.get("/changeCompanyStatus/:cid",async (req,res)=>{
