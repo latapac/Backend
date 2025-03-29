@@ -106,12 +106,41 @@ export async function updateUserPass(_username, _password) {
       }
     }
 
-
     const result = await collection.updateOne(filter, updatedDoc)
     if (result) {
       return true
     } else {
       return false
+    }
+
+  } catch (error) {
+    console.error('Error inserting data:', error);
+    return false;
+  } finally {
+    // Close the connection
+    await client.close();
+    console.log('DATA TRANSACTION DONE');
+  }
+}
+
+
+export async function deleteUser(_username) {
+
+  try {
+
+    await client.connect();
+
+    const db = client.db(dbName);
+    const collection = db.collection('users');
+
+    const filter = { username: _username }
+    
+    const user = await collection.findOne(filter)
+    if (user.role=="admin") {
+      return false
+    } else {
+        const result = await collection.deleteOne(filter)
+        return result 
     }
 
   } catch (error) {

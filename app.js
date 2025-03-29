@@ -1,6 +1,6 @@
 import express from "express"
 import cors from "cors"
-import { addUser, getUsers, updateUserPass } from "./models/user.js"
+import { addUser, deleteUser, getUsers, updateUserPass } from "./models/user.js"
 import { loginUser } from "./models/user.js"
 import { addMachine, getMachines, getMachineData, updateMachineData, getAllMachines, addAuditTrail, getAuditTrailData, getOperator, addOEE, getOEE, getSpeedHistory, getOEEHistory, getBatch } from "./models/machine.js"
 import { addCompany, getAllCompany, getCompanies, toggleCompanyStatus, updateCompany } from "./models/companies.js"
@@ -33,8 +33,6 @@ app.post('/signup/', async (req, res) => {
       res.json({ status: 400, message: "server error" });
     }
   });
-  
-
 })
 
 app.post('/login/', async (req, res) => {
@@ -47,6 +45,8 @@ app.post('/login/', async (req, res) => {
 
   res.json(result)
 })
+
+
 
 app.get('/allusers/:cid', async (req, res) => {
   const cid = req.params.cid
@@ -75,6 +75,23 @@ app.post('/updateUserPassword/', async (req, res) => {
   }
 })
 
+
+
+app.post('/deleteUser/', async (req, res) => {
+  const { username} = req.body
+
+  if (username == ""  ) {
+    return res.json({ status: 405, message: "missing field" })
+  }
+
+  const result = await deleteUser(username)
+
+  if (result) {
+    res.json({ status: 200, message: "ok" })
+  } else {
+    res.json({ status: 400, message: "failed to delete user check if its admin" })
+  }
+})
 
 app.get('/getAllUsers/:cid', async (req, res) => {
 
