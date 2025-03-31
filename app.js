@@ -1,6 +1,6 @@
 import express from "express"
 import cors from "cors"
-import { addUser, deleteUser, getUsers, updateUserPass } from "./models/user.js"
+import { addUser, deleteUser, getUsers, loginAdmin, updateUserPass } from "./models/user.js"
 import { loginUser } from "./models/user.js"
 import { addMachine, getMachines, getMachineData, updateMachineData, getAllMachines, addAuditTrail, getAuditTrailData, getOperator, addOEE, getOEE, getSpeedHistory, getOEEHistory, getBatch } from "./models/machine.js"
 import { addCompany, getAllCompany, getCompanies, toggleCompanyStatus, updateCompany } from "./models/companies.js"
@@ -45,6 +45,16 @@ app.post('/login/', async (req, res) => {
 
   res.json(result)
 })
+
+app.post('/adminLogin/', async (req, res) => {
+  const { username, password } = req.body
+  if (username == '' || password == "") {
+    return res.json({ status: 405, message: "missing field" })
+  }
+  let result = await loginAdmin(username, password)
+  res.json(result)
+})
+
 
 
 

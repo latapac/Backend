@@ -87,6 +87,37 @@ export async function loginUser(_username, _password) {
 }
 
 
+export async function loginAdmin(_username, _password) {
+  try {
+    await client.connect();
+
+    const db = client.db(dbName);
+    const collection = db.collection('admin');
+
+    const query = { username: _username };
+    const user = await collection.findOne(query);
+
+    if (user) {
+      if (_password == user.password) {
+          return { status: 200, ...user };
+      } else {
+        return { status: 400, msg: "INCORRECT PASSWORD" };
+      }
+    } else {
+      return { status: 404, msg: "NO USER FOUND" };
+    }
+
+  } catch (error) {
+    console.error('Error reading data:', error);
+    return { status: 500, msg: "Internal server error" };
+  } finally {
+    // Close the connection
+    await client.close();
+    console.log('DATA TRANSACTION DONE');
+  }
+}
+
+
 export async function updateUserPass(_username, _password) {
 
   try {
