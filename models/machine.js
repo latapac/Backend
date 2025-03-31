@@ -318,16 +318,24 @@ export async function getOEE(_sid, date, RunningShift) {
         const startOfDayISO = startOfDay.toISOString().replace('Z', '');
         const endOfDayISO = endOfDay.toISOString().replace('Z', '');
 
+        let query;
 
-        let query = {
-            'd.RunningShift': RunningShift,
-            "ts": {
-                $gte: startOfDayISO,
-                $lt: endOfDayISO
-            }
-        };
-
-        console.log("Query:", query);
+        if (RunningShift) {
+            query = {
+                'd.RunningShift': RunningShift,
+                "ts": {
+                    $gte: startOfDayISO,
+                    $lt: endOfDayISO
+                }
+            };
+        }else{
+            query = {
+                "ts": {
+                    $gte: startOfDayISO,
+                    $lt: endOfDayISO
+                }
+            };
+        }
 
         const data = await collection.find(query).toArray();
         console.log("Found data:", data);
