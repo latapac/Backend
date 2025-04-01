@@ -5,6 +5,7 @@ import { loginUser } from "./models/user.js"
 import { addMachine, getMachines, getMachineData, updateMachineData, getAllMachines, addAuditTrail, getAuditTrailData, getOperator, addOEE, getOEE, getSpeedHistory, getOEEHistory, getBatch } from "./models/machine.js"
 import { addCompany, getAllCompany, getCompanies, toggleCompanyStatus, updateCompany } from "./models/companies.js"
 import bcrypt from "bcrypt"
+import { v4 } from "uuid"
 
 const app = express()
 const port = 3000
@@ -118,8 +119,13 @@ app.get('/getAllUsers/:cid', async (req, res) => {
 
 
 app.post('/addcompany/', async (req, res) => {
-  const { company_id, name,status, createdAt } = req.body
-  if (await addCompany(company_id, name,status, createdAt)) {
+  const {name,address, unit } = req.body
+
+  const createdAt = Date.now()
+
+  const cid = v4()
+
+  if (await addCompany(cid, name,address,unit, createdAt)) {
     res.json({ status: true })
   } else {
     res.json({ status: false })

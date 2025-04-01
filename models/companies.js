@@ -8,7 +8,7 @@ const client = new MongoClient(url);
 const dbName = "pacmac"
 
 // Function to insert data
-export async function addCompany(_c_id, _name, _status, _createdAt) {
+export async function addCompany(_c_id, _name, _adress,_unit, _createdAt) {
     try {
 
         await client.connect();
@@ -25,7 +25,7 @@ export async function addCompany(_c_id, _name, _status, _createdAt) {
             return false
         }
 
-        const result = await collection.insertOne({ company_id: _c_id, name: _name, status: _status, createdAt: _createdAt });
+        const result = await collection.insertOne({ company_id: _c_id, name: _name, address: _adress,unit:_unit, createdAt: _createdAt });
         if (result) {
             return true
         } else {
