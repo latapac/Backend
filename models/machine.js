@@ -14,12 +14,12 @@ async function connectToDatabase() {
     }
 }
 
-export async function addMachine(_company_id, _serial_number, _purchase_date, _activation_date, _status) {
+export async function addMachine(_company_id, _serial_number, _model, _lineNo,) {
     try {
         await connectToDatabase(); 
 
         const collection = db.collection('machines');
-        const result = await collection.insertOne({company_id: _company_id, serial_number: _serial_number, purchase_date: _purchase_date, activation_date: _activation_date, status: _status });
+        const result = await collection.insertOne({company_id: _company_id, serial_number: _serial_number, model: _model, lineNo: _lineNo, status: true });
         
         return result.acknowledged;
     } catch (error) {

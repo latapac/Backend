@@ -132,10 +132,6 @@ app.post('/addcompany/', async (req, res) => {
   }
 })
 
-
-
-
-
 app.get("/changeCompanyStatus/:cid",async (req,res)=>{
   const cid = req.params.cid
   try {
@@ -166,8 +162,8 @@ app.post('/updatecompany/', async (req, res) => {
 
 
 app.post('/addMachine/', async (req, res) => {
-  const { company_id, serial_number, purchase_date, activation_date, status } = req.body
-  if (await addMachine(company_id, serial_number, purchase_date, activation_date, status)) {
+  const { company_id, serial_number, model, lineNo } = req.body
+  if (await addMachine(company_id, serial_number, model, lineNo)) {
     res.json({ status: true })
   } else {
     res.json({ status: false })
