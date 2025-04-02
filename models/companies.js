@@ -81,11 +81,9 @@ export async function toggleCompanyStatus(_cid) {
         const query = { company_id: _cid }
         
         const company = await collection.findOne(query)
-
-
+        
+        
         if (company) {
-            console.log(company.status);
-            
             const updateCompany = await collection.updateOne(query,{$set:{status:(!company.status)}})
             return {status:200,data:updateCompany}
 

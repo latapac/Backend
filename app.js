@@ -135,9 +135,12 @@ app.post('/addcompany/', async (req, res) => {
 app.get("/changeCompanyStatus/:cid",async (req,res)=>{
   const cid = req.params.cid
   try {
-    return await toggleCompanyStatus(cid)
+    console.log("dekhte hai");
+    
+    const status=await toggleCompanyStatus(cid)
+     res.json(status) 
   } catch (error) {
-    return {status:500,msg:"server failed"}
+    res.json({status:500,msg:"server failed"})
   }
 })
 
