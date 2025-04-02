@@ -100,7 +100,7 @@ app.post('/deleteUser/', async (req, res) => {
   if (result) {
     res.json({ status: 200, message: "ok" })
   } else {
-    res.json({ status: 400, message: "failed to delete user check if its admin" })
+    res.json({ status: 400, message: "failed to delete user check if its og" })
   }
 })
 
@@ -135,8 +135,6 @@ app.post('/addcompany/', async (req, res) => {
 app.get("/changeCompanyStatus/:cid",async (req,res)=>{
   const cid = req.params.cid
   try {
-    console.log("dekhte hai");
-    
     const status=await toggleCompanyStatus(cid)
      res.json(status) 
   } catch (error) {
