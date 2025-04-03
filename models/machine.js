@@ -79,6 +79,19 @@ export async function updateMachineData(_sid, _data) {
     }
 }
 
+export async function deleteMachine(_sid) {
+    try {
+        await connectToDatabase(); 
+        const collection = db.collection('machines');
+        const query = {serial_number:_sid}
+        const result = await collection.deleteOne(query)
+        return result.acknowledged; 
+    } catch (error) {
+        console.error('Error inserting data:', error);
+        return false;
+    }
+}
+
 export async function addAuditTrail(sid,data) {
     try {
         await connectToDatabase(); 

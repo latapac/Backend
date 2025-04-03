@@ -101,6 +101,35 @@ export async function toggleCompanyStatus(_cid) {
 
 }
 
+export async function deleteCompany(_cid) {
+    try {
+        await client.connect();
+        
+        const db = client.db(dbName);
+        const collection = db.collection('companies');
+        
+        const query = { company_id: _cid }
+        
+        const company = await collection.deleteOne(query)
+        
+        
+        if (company) {
+            return {status:200,msg:"company deleted"}
+
+        } else {
+            return { status: 404, msg: "NO COMPANY FOUND" }
+        }
+
+    } catch (error) {
+        console.error('Error reading data:', error);
+    } finally {
+        // Close the connection
+        await client.close();
+        console.log('DATA TRANSACTION DONE');
+    }
+
+}
+
 
 export async function updateCompany(_cid, _cname) {
 

@@ -2,8 +2,8 @@ import express from "express"
 import cors from "cors"
 import { addUser, deleteUser, getUsers, loginAdmin, updateUserPass } from "./models/user.js"
 import { loginUser } from "./models/user.js"
-import { addMachine, getMachines, getMachineData, updateMachineData, getAllMachines, addAuditTrail, getAuditTrailData, getOperator, addOEE, getOEE, getSpeedHistory, getOEEHistory, getBatch } from "./models/machine.js"
-import { addCompany, getAllCompany, getCompanies, toggleCompanyStatus, updateCompany } from "./models/companies.js"
+import { addMachine, getMachines, getMachineData, updateMachineData, getAllMachines, addAuditTrail, getAuditTrailData, getOperator, addOEE, getOEE, getSpeedHistory, getOEEHistory, getBatch, deleteMachine } from "./models/machine.js"
+import { addCompany, deleteCompany, getAllCompany, getCompanies, toggleCompanyStatus, updateCompany } from "./models/companies.js"
 import bcrypt from "bcrypt"
 import { v4 } from "uuid"
 
@@ -75,10 +75,7 @@ app.post('/updateUserPassword/', async (req, res) => {
   }
 
   const result = await updateUserPass(username, password)
-
-  console.log(result);
   
-
   if (result) {
     res.json({ status: 200, message: "ok" })
   } else {
@@ -142,6 +139,16 @@ app.get("/changeCompanyStatus/:cid",async (req,res)=>{
   }
 })
 
+app.get("/deleteCompany/:cid",async (req,res)=>{
+  const cid = req.params.cid
+  try {
+    const status=await deleteCompany(cid)
+     res.json(status) 
+  } catch (error) {
+    res.json({status:500,msg:"server failed"})
+  }
+})
+
 
 app.get('/getcompany/:cid', async (req, res) => {
   const cid = req.params.cid
@@ -184,6 +191,16 @@ app.get('/getAllMachine/', async (req, res) => {
 app.post('/addUpMachineData/:sid', async (req, res) => {
   const sid = req.params.sid
   if (await updateMachineData(sid, req.body)) {
+    res.json({ status: true })
+  } else {
+    res.json({ status: false })
+  }
+})
+
+
+app.get('/deleteMachine/:sid', async (req, res) => {
+  const sid = req.params.sid
+  if (await deleteMachine(sid, req.body)) {
     res.json({ status: true })
   } else {
     res.json({ status: false })
