@@ -167,7 +167,7 @@ export async function deleteUser(_username) {
     const filter = { username: _username }
     
     const user = await collection.findOne(filter)
-    if (user.role.toLowerCase()=="company admin") {
+    if (user) {
       return false
     } else {
         const result = await collection.deleteOne(filter)
