@@ -85,7 +85,9 @@ export async function deleteMachine(_sid) {
         const collection = db.collection('machines');
         const query = {serial_number:_sid}
         const result = await collection.deleteOne(query)
-        return result.acknowledged; 
+        console.log(result);
+        
+        return result.deletedCount!=0; 
     } catch (error) {
         console.error('Error inserting data:', error);
         return false;

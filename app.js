@@ -200,7 +200,7 @@ app.post('/addUpMachineData/:sid', async (req, res) => {
 
 app.get('/deleteMachine/:sid', async (req, res) => {
   const sid = req.params.sid
-  if (await deleteMachine(sid, req.body)) {
+  if (await deleteMachine(sid)) {
     res.json({ status: true })
   } else {
     res.json({ status: false })

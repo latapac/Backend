@@ -110,10 +110,10 @@ export async function deleteCompany(_cid) {
         
         const query = { company_id: _cid }
         
-        const company = await collection.deleteOne(query)
+        const result = await collection.deleteOne(query)
         
         
-        if (company) {
+        if (result.deletedCount!=0) {
             return {status:200,msg:"company deleted"}
 
         } else {
