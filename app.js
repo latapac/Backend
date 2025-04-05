@@ -2,7 +2,7 @@ import express from "express"
 import cors from "cors"
 import { addUser, deleteUser, getUsers, loginAdmin, updateUserPass } from "./models/user.js"
 import { loginUser } from "./models/user.js"
-import { addMachine, getMachines, getMachineData, updateMachineData, getAllMachines, addAuditTrail, getAuditTrailData, getOperator, addOEE, getOEE, getSpeedHistory, getOEEHistory, getBatch, deleteMachine } from "./models/machine.js"
+import { addMachine, getMachines, getMachineData, updateMachineData, getAllMachines, addAuditTrail, getAuditTrailData, getOperator, addOEE, getOEE, getSpeedHistory, getOEEHistory, getBatch, deleteMachine, updateLineMachine } from "./models/machine.js"
 import { addCompany, deleteCompany, getAllCompany, getCompanies, toggleCompanyStatus, updateCompany } from "./models/companies.js"
 import bcrypt from "bcrypt"
 import { v4 } from "uuid"
@@ -127,6 +127,14 @@ app.post('/addcompany/', async (req, res) => {
   } else {
     res.json({ status: false })
   }
+})
+
+
+app.post('/updateMachineLine/', async (req, res) => {
+  const {line,sid } = req.body
+
+  let result = await updateLineMachine(sid,line) 
+  res.json(result)
 })
 
 app.get("/changeCompanyStatus/:cid",async (req,res)=>{

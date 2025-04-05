@@ -46,6 +46,24 @@ export async function getMachines(_cid) {
     }
 }
 
+export async function updateLineMachine(_sid,_line) {
+    try {
+        await connectToDatabase();
+
+        const collection = db.collection('machines');
+        const query = { serial_number: _sid };
+        
+        const machine = await collection.updateOne(query,{$set:{lineNo:_line}})
+        if (machine.modifiedCount!=0) {
+            return { status: 200, msg: "updated machine" };
+        } else {
+            return { status: 404, msg: "NO MACHINE FOUND" };
+        }
+    } catch (error) {
+        console.error('Error reading data:', error);
+    }
+}
+
 export async function getAllMachines() {
     try {
         await connectToDatabase();
